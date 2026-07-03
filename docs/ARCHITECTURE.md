@@ -8,7 +8,7 @@ _Last updated: 2026-07-03 — recency signal, not a correctness guarantee. The f
 |-------|-----------|-----|
 | Web app | Next.js (App Router) + React + TypeScript | User's stack; server-side API routes avoid CORS and hide the fetch logic |
 | Hosting | Vercel | User's deploy target; free tier fits |
-| Tweet data | FxTwitter API (`api.fxtwitter.com`), fallback: syndication endpoint (`cdn.syndication.twimg.com`) | Keyless, free JSON — avoids scraping and the paid X API |
+| Tweet data | FxTwitter API **v2** (`api.fxtwitter.com/2/thread/{id}`, `/2/conversation/{id}`, `/2/status/{id}`), fallback: syndication endpoint (`cdn.syndication.twimg.com`, single tweets only) | Keyless, free JSON; v2 gives whole threads, real replies (cursor-paginated), and full X Article content in one payload |
 | Core converter | Framework-agnostic TS module (fetch → normalize → Markdown) | Must be reusable by the later MCP server / Claude Code plugin |
 | LLM integration (later) | MCP server / Claude Code plugin | Thin wrapper over the deployed API or the core module |
 
@@ -26,7 +26,7 @@ threadmark/
 
 ## Data Flow
 
-{To be refined during brainstorming.} X URL (user paste) → API route → FxTwitter JSON → normalized post model → Markdown string → previewed in UI / downloaded as `.md`. No database planned for v1 — stateless conversion.
+{To be refined during brainstorming.} X URL (user paste) + options → API route → FxTwitter `/2/thread/{id}` (or `/2/conversation/{id}` when replies requested; article content arrives inside the status payload) → normalized model (post, author, media, quotes, thread chain, replies, article blocks) → Markdown string (YAML frontmatter + body) → previewed in UI / copied / downloaded as `.md`. No database planned for v1 — stateless conversion.
 
 ## Key Patterns
 

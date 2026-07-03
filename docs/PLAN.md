@@ -14,10 +14,10 @@
 
 _Last checkpoint: none yet_
 
-- **Just shipped:** project scaffolded from the initial pitch (2026-07-03); name, stack, and data-source approach decided
-- **In flight:** nothing — clean stopping point
-- **Next:** brainstorm the feature set and flows with the user (BRAINSTORMING phase), then flip to BUILDING
-- **Start here:** this file (Vision + Decisions Log), `docs/ARCHITECTURE.md`
+- **Just shipped:** brainstorm round 1 (2026-07-03) — v1 scope, output format (YAML frontmatter + body), and web UX (paste → options → preview) decided; FxTwitter **v2** endpoints verified live (native threads, real replies, full article content — all keyless)
+- **In flight:** brainstorming — remaining: options-panel contents, reply depth/limits, then flip to BUILDING
+- **Next:** settle the options panel, flip Project Phase to BUILDING, start the core converter
+- **Start here:** this file (Feasibility notes + Decisions Log), `docs/ARCHITECTURE.md`
 
 ## Vision
 
@@ -29,10 +29,14 @@ Two delivery surfaces, sharing one core converter:
 1. **Web app** (Next.js on Vercel) — paste a link, preview, download/copy the `.md`.
 2. **Claude Code plugin / MCP server** (later) — hand an X link to Claude and it gets the Markdown; likely a thin client hitting the deployed API, or a local MCP reusing the core library.
 
-### Feasibility notes (from initial research, 2026-07-03)
-- **FxTwitter API** (`api.fxtwitter.com`) — free, keyless JSON for any tweet: text, author, media URLs, quote tweets; can walk same-author threads. Primary data source.
-- **Twitter syndication endpoint** (`cdn.syndication.twimg.com`) — keyless; what Vercel's `react-tweet` uses. Fallback/secondary source.
-- **Full reply trees** require the paid official X API (~$200/mo basic tier) — so replies are scoped *best-effort* (same-author thread continuation, not arbitrary replies) unless the user later opts into an API key.
+### Feasibility notes (verified live, 2026-07-03)
+- **FxTwitter API v2** (`api.fxtwitter.com/2/...`) — free, keyless, and far richer than assumed. Verified against the live API and the [FxEmbed/FxEmbed](https://github.com/FxEmbed/FxEmbed) OpenAPI spec (`docs/specs/fxtwitter-openapi.json`):
+  - `/2/status/{id}` — single post: text, author, media, quote, poll, community notes, **and an `article` object** (title, cover, full Draft.js `content.blocks` + `entityMap` with MARKDOWN/MEDIA/TWEET entities) for X Articles.
+  - `/2/thread/{id}` — native same-author thread; no manual walking needed.
+  - `/2/conversation/{id}` — **actual replies** (verified: 36 replies for status 20) with cursor pagination. Supersedes the earlier "$200/mo X API needed for replies" assumption.
+  - Also available if ever needed: `/2/status/{id}/quotes`, `/2/profile/{handle}/articles`, `/2/search`.
+- **Twitter syndication endpoint** (`cdn.syndication.twimg.com/tweet-result?id=...&token=a`) — verified working, keyless. Single tweets only, **no replies/threads** — fallback if FxTwitter is down.
+- **X Articles**: article body is Draft.js blocks; `entityMap` even carries a `markdown` string per MARKDOWN entity → converter needs a blocks→Markdown renderer (FxEmbed's `src/helpers/article.ts` is a reference implementation for parsing the block format).
 
 ## Features
 
@@ -40,12 +44,13 @@ Un-triaged ideas live in `docs/BACKLOG.md` (created on demand) — **this table 
 
 | Feature | Priority | Status | Doc |
 |---------|----------|--------|-----|
-| Core converter: X post/thread → Markdown (text, author, media, quote tweets) | high | planned | — |
-| Web app: paste link → preview → download/copy `.md` | high | planned | — |
-| Thread walking (same-author continuation via FxTwitter) | high | planned | — |
-| Attached images in output (embed links; maybe optional download) | medium | planned | — |
-| Replies (best-effort; scope TBD during brainstorming) | medium | planned | — |
-| X Articles (long-form posts) support | medium | planned | — |
+| Core converter: X post/thread → Markdown (text, author, media, quote tweets; YAML frontmatter + body) | high | planned | — |
+| Web app: paste link → options → preview → download/copy `.md` | high | planned | — |
+| Threads via FxTwitter `/2/thread/{id}` | high | planned | — |
+| Attached images in output (embed links) | high | planned | — |
+| Quote tweets inlined as blockquotes | high | planned | — |
+| Replies via FxTwitter `/2/conversation/{id}` (cursor-paginated) | medium | planned | — |
+| X Articles (Draft.js blocks → Markdown) | medium | planned | — |
 | Claude Code plugin / MCP server reusing the converter | medium | planned | — |
 
 Status values: `planned` | `in-progress` | `done` | `cut`
@@ -60,6 +65,10 @@ Record every significant decision so future-you (or post-compaction-you) knows W
 | Stack: Next.js (App Router) + React + TypeScript on Vercel | User's preferred stack; API routes handle the fetch/convert server-side | 2026-07-03 |
 | Data source: FxTwitter API (primary), syndication endpoint (fallback) — no scraping, no official X API for v1 | Keyless, free, reliable JSON; official API is ~$200/mo and only needed for full reply trees | 2026-07-03 |
 | MCP/plugin ships *after* the web app, reusing the same core converter | Validate the conversion quality first; the plugin is then a thin wrapper | 2026-07-03 |
+| Use FxTwitter **v2** endpoints (`/2/thread`, `/2/conversation`, `/2/status`) | Verified live: native threads + real replies with cursors, keyless — kills both manual thread-walking and the "paid API for replies" constraint | 2026-07-03 |
+| Output format: YAML frontmatter (author, date, URL, stats) + clean Markdown body | Machine-parseable metadata + LLM-friendly prose; user picked over pure-prose and verbose per-tweet blocks | 2026-07-03 |
+| Web UX: paste → options (replies? stats? images?) → preview → copy/download | User wants control over what lands in the `.md` before converting | 2026-07-03 |
+| v1 scope: threads, images, quote tweets, replies, X Articles all in | All verified feasible on keyless endpoints; nothing needs to be cut for feasibility | 2026-07-03 |
 
 ## Rejected Ideas
 
@@ -70,3 +79,5 @@ Record ideas we considered and explicitly decided NOT to do. This prevents re-su
 | Scraping twitter.com/x.com HTML directly (or via WebFetch) | X serves an empty JS shell to non-browser fetchers; headless-browser scraping is fragile and ToS-risky. Keyless JSON endpoints solve it cleanly | 2026-07-03 |
 | Official X API for v1 | ~$200/mo basic tier; only strictly needed for full reply trees, which are scoped best-effort instead | 2026-07-03 |
 | Names: xtract, tweet2md | xtract leans on X branding that may age poorly; tweet2md reads as a tool, not a product | 2026-07-03 |
+| Syndication-endpoint tricks for replies | Verified: syndication `tweet-result` payload has `conversation_count` but no reply objects. Moot anyway — FxTwitter `/2/conversation/{id}` returns real replies keyless | 2026-07-03 |
+| Manual same-author thread walking (fetch reply chain hop by hop) | FxTwitter `/2/thread/{id}` returns the whole thread in one call | 2026-07-03 |
