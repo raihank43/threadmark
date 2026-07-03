@@ -1,6 +1,6 @@
 # Project Plan
 
-## Project Phase: BRAINSTORMING
+## Project Phase: BUILDING
 
 > **This marker controls how Claude behaves at the start of every session — read it first.**
 > - `BRAINSTORMING` — the vision/roadmap below isn't settled yet. Before building features, help the user complete the Vision and Features sections. Ask, propose, refine. Don't jump into code.
@@ -14,9 +14,9 @@
 
 _Last checkpoint: none yet_
 
-- **Just shipped:** brainstorm round 1 (2026-07-03) — v1 scope, output format (YAML frontmatter + body), and web UX (paste → options → preview) decided; FxTwitter **v2** endpoints verified live (native threads, real replies, full article content — all keyless)
-- **In flight:** brainstorming — remaining: options-panel contents, reply depth/limits, then flip to BUILDING
-- **Next:** settle the options panel, flip Project Phase to BUILDING, start the core converter
+- **Just shipped:** brainstorming complete (2026-07-03) — v1 scope, output format, web UX, options panel all decided; FxTwitter **v2** endpoints verified live; phase flipped to BUILDING
+- **In flight:** first build milestone — Next.js scaffold + core converter
+- **Next:** core converter (URL → fetch → normalize → Markdown), then the web UI
 - **Start here:** this file (Feasibility notes + Decisions Log), `docs/ARCHITECTURE.md`
 
 ## Vision
@@ -69,6 +69,8 @@ Record every significant decision so future-you (or post-compaction-you) knows W
 | Output format: YAML frontmatter (author, date, URL, stats) + clean Markdown body | Machine-parseable metadata + LLM-friendly prose; user picked over pure-prose and verbose per-tweet blocks | 2026-07-03 |
 | Web UX: paste → options (replies? stats? images?) → preview → copy/download | User wants control over what lands in the `.md` before converting | 2026-07-03 |
 | v1 scope: threads, images, quote tweets, replies, X Articles all in | All verified feasible on keyless endpoints; nothing needs to be cut for feasibility | 2026-07-03 |
+| Options panel: **replies toggle** (off by default, user-set limit w/ cursor-following) + **image mode** (embedded `![alt](url)` vs plain links); engagement stats always in frontmatter, no toggle | Two options users actually vary; stats cost nothing in frontmatter | 2026-07-03 |
+| Phase → BUILDING; publish to GitHub | Roadmap confirmed by user; repo requested | 2026-07-03 |
 
 ## Rejected Ideas
 
