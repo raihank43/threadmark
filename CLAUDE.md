@@ -88,7 +88,7 @@ Commit after every meaningful, **verified** change — never let working code ac
   - `fix(cart): prevent negative quantity on item update`
   - `docs(search): document elasticsearch gotchas`
 
-Remote: `github.com/raihank43/threadmark` (private) — push after committing.
+Remote: `github.com/raihank43/threadmark` (public) — push after committing.
 
 ## Project Artifacts Index
 
