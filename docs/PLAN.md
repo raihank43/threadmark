@@ -14,10 +14,10 @@
 
 _Last checkpoint: none yet_
 
-- **Just shipped:** brainstorming complete (2026-07-03) — v1 scope, output format, web UX, options panel all decided; FxTwitter **v2** endpoints verified live; phase flipped to BUILDING
-- **In flight:** first build milestone — Next.js scaffold + core converter
-- **Next:** core converter (URL → fetch → normalize → Markdown), then the web UI
-- **Start here:** this file (Feasibility notes + Decisions Log), `docs/ARCHITECTURE.md`
+- **Just shipped:** core converter (2026-07-03) — `src/lib/threadmark.ts`, live-verified (threads, media, quotes, replies); Next.js 16 scaffold; GitHub repo `raihank43/threadmark` (private)
+- **In flight:** nothing — clean stopping point
+- **Next:** web UI (paste → options → preview → copy/download) via an API route calling `convert()`; then X Articles renderer (Draft.js blocks → Markdown)
+- **Start here:** `docs/feature-core-converter.md`, this file (Decisions Log)
 
 ## Vision
 
@@ -44,12 +44,12 @@ Un-triaged ideas live in `docs/BACKLOG.md` (created on demand) — **this table 
 
 | Feature | Priority | Status | Doc |
 |---------|----------|--------|-----|
-| Core converter: X post/thread → Markdown (text, author, media, quote tweets; YAML frontmatter + body) | high | planned | — |
+| Core converter: X post/thread → Markdown (text, author, media, quote tweets; YAML frontmatter + body) | high | done | [feature-core-converter.md](feature-core-converter.md) |
 | Web app: paste link → options → preview → download/copy `.md` | high | planned | — |
-| Threads via FxTwitter `/2/thread/{id}` | high | planned | — |
-| Attached images in output (embed links) | high | planned | — |
-| Quote tweets inlined as blockquotes | high | planned | — |
-| Replies via FxTwitter `/2/conversation/{id}` (cursor-paginated) | medium | planned | — |
+| Threads via FxTwitter `/2/thread/{id}` | high | done | [feature-core-converter.md](feature-core-converter.md) |
+| Attached images in output (embed links) | high | done | [feature-core-converter.md](feature-core-converter.md) |
+| Quote tweets inlined as blockquotes | high | done | [feature-core-converter.md](feature-core-converter.md) |
+| Replies via FxTwitter `/2/conversation/{id}` (cursor-paginated) | medium | done | [feature-core-converter.md](feature-core-converter.md) |
 | X Articles (Draft.js blocks → Markdown) | medium | planned | — |
 | Claude Code plugin / MCP server reusing the converter | medium | planned | — |
 

@@ -16,8 +16,12 @@ _Last updated: 2026-07-03 — recency signal, not a correctness guarantee. The f
 
 ```
 threadmark/
-├── docs/
-└── ... (to be filled as the project takes shape)
+├── docs/                    # growing-docs system (PLAN, RULES, feature docs)
+├── scripts/check.ts         # runnable converter check (npm run check)
+├── src/
+│   ├── app/                 # Next.js App Router (scaffold; UI not built yet)
+│   └── lib/threadmark.ts    # core converter — framework-agnostic, no Next imports
+└── AGENTS.md                # scaffold-generated: Next 16 differs from training data; read node_modules/next/dist/docs
 ```
 
 ## System Overview

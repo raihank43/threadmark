@@ -6,7 +6,9 @@
 
 ## Folder Structure Conventions
 
-{To be filled — the *convention* for where new files go and why. (The actual current tree lives in ARCHITECTURE.md.)}
+- **Core logic lives in `src/lib/` and stays framework-agnostic** — no Next.js/React imports there. The web layer (`src/app/`) and the future MCP server are thin callers. This is the load-bearing boundary of the project.
+- Runnable checks go in `scripts/` as plain `.ts`, run directly with `node` (Node ≥23 type stripping — no tsx/ts-node). Imports in scripts need explicit `.ts` extensions.
+- **Next.js 16 differs from training data** — before writing app-layer code, check `node_modules/next/dist/docs/` (see `AGENTS.md`).
 
 ## Naming Conventions
 
