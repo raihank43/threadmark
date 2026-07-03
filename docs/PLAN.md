@@ -12,12 +12,12 @@
 
 > The 30-second cold-start brief — so a fresh session (or a post-compaction one) can resume *without re-reading everything*. Kept current by `/checkpoint`: **the tight brief only** lives here (~15–30 lines); the full session reports go to `docs/CHECKPOINTS.md` (created by `/checkpoint`, newest first). **Read this first**, then read only the docs the "Start here" line points to.
 
-_Last checkpoint: none yet_
+_Last checkpoint: 3f9eecd (2026-07-03)_
 
-- **Just shipped:** core converter (2026-07-03) — `src/lib/threadmark.ts`, live-verified (threads, media, quotes, replies); Next.js 16 scaffold; GitHub repo `raihank43/threadmark` (private)
+- **Just shipped:** core converter (2026-07-03) — `src/lib/threadmark.ts`, live-verified (threads, media, quotes, replies); Next.js 16 scaffold; GitHub repo `raihank43/threadmark` (public)
 - **In flight:** nothing — clean stopping point
 - **Next:** web UI (paste → options → preview → copy/download) via an API route calling `convert()`; then X Articles renderer (Draft.js blocks → Markdown)
-- **Start here:** `docs/feature-core-converter.md`, this file (Decisions Log)
+- **Start here:** `docs/feature-core-converter.md`, this file (Decisions Log); Next 16 ≠ training data — check `node_modules/next/dist/docs/` before app-layer code
 
 ## Vision
 
@@ -70,7 +70,8 @@ Record every significant decision so future-you (or post-compaction-you) knows W
 | Web UX: paste → options (replies? stats? images?) → preview → copy/download | User wants control over what lands in the `.md` before converting | 2026-07-03 |
 | v1 scope: threads, images, quote tweets, replies, X Articles all in | All verified feasible on keyless endpoints; nothing needs to be cut for feasibility | 2026-07-03 |
 | Options panel: **replies toggle** (off by default, user-set limit w/ cursor-following) + **image mode** (embedded `![alt](url)` vs plain links); engagement stats always in frontmatter, no toggle | Two options users actually vary; stats cost nothing in frontmatter | 2026-07-03 |
-| Phase → BUILDING; publish to GitHub | Roadmap confirmed by user; repo requested | 2026-07-03 |
+| Phase → BUILDING; publish to GitHub | Roadmap confirmed by user; repo requested (made **public** same day) | 2026-07-03 |
+| Minimalism ruleset: v2, **full** intensity, **code-only** scope, lives in `.claude/rules/minimalism.md` | Chat prose back to normal length (user preference); kept out of CLAUDE.md so growing-docs template upgrades can't clobber it | 2026-07-03 |
 
 ## Rejected Ideas
 

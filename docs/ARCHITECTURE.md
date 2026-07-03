@@ -16,6 +16,7 @@ _Last updated: 2026-07-03 — recency signal, not a correctness guarantee. The f
 
 ```
 threadmark/
+├── .claude/rules/minimalism.md  # minimalism ruleset (v2, full, code-only) — auto-loaded, kept out of CLAUDE.md
 ├── docs/                    # growing-docs system (PLAN, RULES, feature docs)
 ├── scripts/check.ts         # runnable converter check (npm run check)
 ├── src/
